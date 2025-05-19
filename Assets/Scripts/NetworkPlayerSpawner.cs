@@ -2,6 +2,23 @@ using Fusion;
 using UnityEngine;
 using System.Collections.Generic;
 
+public class NetworkPlayerSpawner : SimulationBehaviour, IPlayerJoined
+{
+    public GameObject playerPrefab;
+
+    public void PlayerJoined(PlayerRef player)
+    {
+        if (player == Runner.LocalPlayer)
+        {
+            Runner.Spawn(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+    }
+}
+
+
+
+
+
 // public class NetworkPlayerSpawner : MonoBehaviour , INetworkRunnerCallbacks
 // {
 //     [SerializeField] private GameObject playerPrefab;
