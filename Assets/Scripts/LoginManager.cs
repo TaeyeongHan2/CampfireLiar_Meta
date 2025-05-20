@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    private const string MainSceneName = "DemoNight";
+    private const string LobbySceneName = "LobbyScene";
     
     public GameObject runnerPrefab;
     public TMP_InputField roomNameInputField;
@@ -44,27 +44,9 @@ public class LoginManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             SessionName = roomName,
             GameMode = GameMode.Shared,
-            Scene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(MainSceneName))
+            Scene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(LobbySceneName))
         });
     }
-    
-    // public Text statusText;
-    //
-    // public void OnClickConnect()
-    // {
-    //     string nickname = nicknameInput.text.Trim();
-    //     if (string.IsNullOrEmpty(nickname))
-    //     {
-    //         statusText.text = "닉네임을 입력하세요!";
-    //         return;
-    //     }
-    //     PlayerPrefs.SetString("PlayerNickname", nickname);
-    //
-    //     statusText.text = "접속 중...";
-    //
-    //     // LobbyScene으로 이동
-    //     SceneManager.LoadScene("LobbyScene");
-    // }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
