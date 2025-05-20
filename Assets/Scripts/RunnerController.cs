@@ -2,71 +2,23 @@ using System;
 using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class LoginManager : MonoBehaviour, INetworkRunnerCallbacks
+public class RunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
-    private const string MainSceneName = "DemoNight";
-    
-    public GameObject runnerPrefab;
-    public TMP_InputField nicknameInput;
-    public TMP_InputField roomNameInputField;
+    public static NetworkRunner Runner;
 
-    private static NetworkRunner Runner;
-
-    public void CreateRoom()
+    private void Awake()
     {
-        CreateRoom(roomNameInputField.text);
+        DontDestroyOnLoad(this);
+        Runner = GetComponent<NetworkRunner>();
     }
 
-    public void JoinLobby()
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (Runner == null)
-        {
-            var runnerGo = Instantiate(runnerPrefab);
-            Runner = runnerGo.GetComponent<NetworkRunner>();
-        }
-
-        Runner.JoinSessionLobby(SessionLobby.Shared);
-    }
-
-    private void CreateRoom(string roomName)
-    {
-        if (Runner == null)
-        {
-            var runnerGo = Instantiate(runnerPrefab);
-            Runner = runnerGo.GetComponent<NetworkRunner>();
-        }
-
-        Runner.StartGame(new StartGameArgs
-        {
-            SessionName = roomName,
-            GameMode = GameMode.Shared,
-            Scene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(MainSceneName))
-        });
+        Debug.Log($"OnPlayerJoined: {player.PlayerId}");
     }
     
-    // public Text statusText;
-    //
-    // public void OnClickConnect()
-    // {
-    //     string nickname = nicknameInput.text.Trim();
-    //     if (string.IsNullOrEmpty(nickname))
-    //     {
-    //         statusText.text = "닉네임을 입력하세요!";
-    //         return;
-    //     }
-    //     PlayerPrefs.SetString("PlayerNickname", nickname);
-    //
-    //     statusText.text = "접속 중...";
-    //
-    //     // LobbyScene으로 이동
-    //     SceneManager.LoadScene("LobbyScene");
-    // }
-
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
         throw new NotImplementedException();
@@ -76,12 +28,7 @@ public class LoginManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         throw new NotImplementedException();
     }
-
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         throw new NotImplementedException();
