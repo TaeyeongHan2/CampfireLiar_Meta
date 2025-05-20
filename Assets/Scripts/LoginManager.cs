@@ -12,7 +12,6 @@ public class LoginManager : MonoBehaviour, INetworkRunnerCallbacks
     private const string MainSceneName = "DemoNight";
     
     public GameObject runnerPrefab;
-    public TMP_InputField nicknameInput;
     public TMP_InputField roomNameInputField;
 
     private static NetworkRunner Runner;
