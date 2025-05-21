@@ -1,3 +1,6 @@
+//이 스크립트는 혹시 몰르니까 참고용으로 남겨둠
+//여기 있는 내용을 FussionSession으로 넘길 예정
+
 // using System;
 // using System.Collections.Generic;
 // using Fusion;
