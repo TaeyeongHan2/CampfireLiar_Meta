@@ -13,9 +13,17 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] [ScenePath] private string loginScene;
     [SerializeField] [ScenePath] private string lobbyScene;
     [SerializeField] [ScenePath] private string demoNight;
-
+    
     //NetworkRunner 인스턴스는 하나만 유지
     public NetworkRunner Runner { get; private set; }
+    
+    //로비씬의 플레이어 프리팹 UI 스폰용 필드
+    public GameObject lobbyPlayerUIPrefab;
+    //로비 UI 프리팹을 넣을 부모 (Canvas의 Panel)을 할당하는 필드
+    public Transform lobbyUIParent;
+    
+    //플레이어별로 UI 관리용 Dictionary (PlayerRef → GameObject)
+    private Dictionary<PlayerRef, GameObject> lobbyPlayerUIs = new  Dictionary<PlayerRef, GameObject>();
 
     private void Awake()
     {
