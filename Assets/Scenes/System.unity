@@ -450,6 +450,8 @@ MonoBehaviour:
   loginScene: Assets/Scenes/LoginScene.unity
   lobbyScene: Assets/Scenes/LobbyScene.unity
   demoNight: Assets/Scenes/DemoNight.unity
+  lobbyPlayerUIPrefab: {fileID: 1894218510615343383, guid: c14f91df479b1984c9df453ca71c9eea, type: 3}
+  lobbyUIParent: {fileID: 6058291579165382169, guid: 447ba8242a7cf0141813bf43d0a53210, type: 3}
 --- !u!1 &1952359620
 GameObject:
   m_ObjectHideFlags: 0
