@@ -5,6 +5,7 @@ using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -21,6 +22,11 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     public GameObject lobbyPlayerUIPrefab;
     //로비 UI 프리팹을 넣을 부모 (Canvas의 Panel)을 할당하는 필드
     public Transform lobbyUIParent;
+    
+    //닉네임 입력 필드
+    public TMP_InputField nicknameInputField;
+    //방 이름 입력 필드
+    public TMP_InputField roomNameInputField;
     
     //플레이어별로 UI 관리용 Dictionary (PlayerRef → GameObject)
     private Dictionary<PlayerRef, GameObject> lobbyPlayerUIs = new  Dictionary<PlayerRef, GameObject>();
@@ -102,6 +108,49 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
             Debug.LogWarning(shutdownReason);
         }
     }
+    
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+        if (SceneManager.GetActiveScene().name == lobbyScene)
+        {
+            GameObject ui = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
+            lobbyPlayerUIs[player] = ui;
+        }
+    }
+    
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+        if (lobbyPlayerUIs.TryGetValue(player, out var ui))
+        {
+            Destroy(ui);
+            lobbyPlayerUIs.Remove(player);
+        }
+    }
+    
+    public void OnSceneLoadDone(NetworkRunner runner)
+    {
+        if (SceneManager.GetActiveScene().name == lobbyScene)
+        {
+            foreach (var player in runner.ActivePlayers)
+            {
+                if (!lobbyPlayerUIs.ContainsKey(player))
+                {
+                    GameObject ui = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
+                    lobbyPlayerUIs[player] = ui;
+                }
+            }
+        }
+    }
+
+    public void OnLoginButtonClicked()
+    {
+        //입력값 읽기
+        string nickname = nicknameInputField.text;
+        string roomName = roomNameInputField.text;
+        
+        //방 생성 및 네트워크 연결
+        CreateRoom(roomName);
+    }
 
     // INetworkRunnerCallbacks 구현 (필요한 콜백만 구현)
     #region INetworkRunnerCallbacks
@@ -139,22 +188,10 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
         {
         }
 
-        public void OnSceneLoadDone(NetworkRunner runner)
-        {
-        }
-
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
         }
-
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-        {
-        }
-
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-        {
-        }
-
+        
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
         {
         }
