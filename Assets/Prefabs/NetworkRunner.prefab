@@ -183,4 +183,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a4c6d39ca5e0746becc508e5710dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
+  lobbyPlayerUIPrefab: {fileID: 1894218510615343383, guid: c14f91df479b1984c9df453ca71c9eea, type: 3}
+  playerPrefab3D: {fileID: 0}
