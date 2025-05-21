@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 607174462}
   - component: {fileID: 607174463}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: SystemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -378,6 +378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1757139261}
+  - component: {fileID: 1757139262}
   m_Layer: 0
   m_Name: FusionSession
   m_TagString: Untagged
@@ -401,6 +402,22 @@ Transform:
   - {fileID: 607174462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1757139262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757139260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2c7f39502cb664d8987ebb16974d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runnerPrefab: {fileID: 0}
+  loginScene: Assets/Scenes/LoginScene.unity
+  lobbyScene: Assets/Scenes/LobbyScene.unity
+  demoNight: Assets/Scenes/DemoNight.unity
 --- !u!1 &1952359620
 GameObject:
   m_ObjectHideFlags: 0
