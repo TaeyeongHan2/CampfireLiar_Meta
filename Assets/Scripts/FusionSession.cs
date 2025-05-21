@@ -6,6 +6,7 @@ using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.PlayerLoop;
 
 public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -75,12 +76,13 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
                 GameMode = GameMode.Shared,
                 SessionName = sessionCode,
                 SceneManager = Runner.GetComponent<INetworkSceneManager>(),
-                Scene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(loginScene))
+                Scene = SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(lobbyScene))
             });
                 
         yield return new WaitUntil(() => task.IsCompleted);
 
         SystemManager.Instance?.ToggleInteraction(true);
+        UIManager.Instance.TogglePlayButton(true);
             
         var result = task.Result;
         Debug.Log($"StartGame Result: {result.ShutdownReason}");
@@ -144,6 +146,7 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnLoginButtonClicked()
     {
+        Debug.Log("OnLoginButtonClicked 호출됨");
         //입력값 읽기
         string nickname = nicknameInputField.text;
         string roomName = roomNameInputField.text;

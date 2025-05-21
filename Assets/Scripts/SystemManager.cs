@@ -1,3 +1,4 @@
+using Fusion;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,10 +16,10 @@ public class SystemManager : MonoBehaviour
     {
         Instance = this;
 
-        SceneManager.sceneLoaded += OnSceneLoded;
+        NetworkSceneManagerDefault.sceneLoaded += OnSceneLoded;
     }
 
-    private void OnSceneLoded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoded(Scene scene)
     {
         if (scene.name.Contains("Room"))
         {
