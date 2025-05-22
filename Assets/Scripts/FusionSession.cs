@@ -113,10 +113,24 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        SpawnLobbyPlayerUI(player,  runner);
         if (SceneManager.GetActiveScene().name == lobbyScene)
         {
             GameObject ui = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
             lobbyPlayerUIs[player] = ui;
+        }
+    }
+
+    public void SpawnLobbyPlayerUI(PlayerRef player, NetworkRunner runner)
+    {
+        var uiGo = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
+        var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
+        if (lobbyPlayer != null)
+        {
+            //닉네임은 StaticData 또는 네트워크에서 받아온 값 사용
+            string nickname = (runner.LocalPlayer == player) ? 
+                StaticData.LocalNickname : "다른 플레이어";
+            lobbyPlayer.SetNickname(nickname);
         }
     }
     
@@ -150,6 +164,18 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
         //입력값 읽기
         string nickname = nicknameInputField.text;
         string roomName = roomNameInputField.text;
+        
+        //닉네임 저장 
+        if (!string.IsNullOrEmpty(nickname))
+        {
+            StaticData.LocalNickname = nickname;
+            Debug.Log($"닉네임 저장됨: {StaticData.LocalNickname}");
+        }
+        else
+        {
+            //닉네임이 비어있으면 기본값 설정
+            StaticData.LocalNickname = $"Player_{UnityEngine.Random.Range(1, 1000)}";
+        }
         
         //방 생성 및 네트워크 연결
         CreateRoom(roomName);
