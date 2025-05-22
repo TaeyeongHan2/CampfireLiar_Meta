@@ -75,6 +75,8 @@ namespace Fusion {
     public Transform MultiPeerDontDestroyOnLoadRoot { get; private set; }
 
     public NetworkRunner Runner { get; private set; }
+    
+    public static event Action<Scene> sceneLoaded;
 
     private bool IsMultiplePeer => Runner.Config.PeerMode == NetworkProjectConfig.PeerModes.Multiple;
     private bool _isLoading;
@@ -620,6 +622,7 @@ namespace Fusion {
       
       Log.TraceSceneManager(Runner, $"Finished loading & processing {scene.Dump()} for {sceneRef}");
       Runner.InvokeSceneLoadDone(new SceneLoadDoneArgs(sceneRef, sceneObjects, scene, rootObjects));
+      sceneLoaded.Invoke(scene);
       yield break;
     }
 
