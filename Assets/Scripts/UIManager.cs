@@ -12,23 +12,23 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
 
-        NetworkSceneManagerDefault.sceneLoaded += OnSceneLoaded;
+        //NetworkSceneManagerDefault.sceneLoaded += OnSceneLoaded;
         
         
     }
 
-    private void OnSceneLoaded(Scene scene)
-    {
-        if (scene.name.Contains("LoginScene"))
-        {
-            TogglePlayButton(true);
-        }
-
-        if (scene.name.Contains("LobbyScene"))
-        {
-            TogglePlayButton(false);
-        }
-    }
+    // private void OnSceneLoaded(Scene scene)
+    // {
+    //     if (scene.name.Contains("LoginScene"))
+    //     {
+    //         TogglePlayButton(true);
+    //     }
+    //
+    //     if (scene.name.Contains("LobbyScene"))
+    //     {
+    //         TogglePlayButton(false);
+    //     }
+    // }
 
     public void TogglePlayButton(bool isOn)
     {
