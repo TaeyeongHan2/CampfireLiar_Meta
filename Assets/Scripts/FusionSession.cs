@@ -123,13 +123,18 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
 
     public void SpawnLobbyPlayerUI(PlayerRef player, NetworkRunner runner)
     {
+        // 이미 생성된 경우 중복 생성 방지
+        if (lobbyPlayerUIs.ContainsKey(player))
+            return;
+        
         var uiGo = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
+        
         var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
         if (lobbyPlayer != null)
         {
             //닉네임은 StaticData 또는 네트워크에서 받아온 값 사용
             string nickname = (runner.LocalPlayer == player) ? 
-                StaticData.LocalNickname : "다른 플레이어";
+                StaticData.LocalNickname : $"Player_{player.PlayerId}";
             lobbyPlayer.SetNickname(nickname);
         }
     }
