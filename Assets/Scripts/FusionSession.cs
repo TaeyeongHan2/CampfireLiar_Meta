@@ -32,6 +32,9 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     //플레이어별로 UI 관리용 Dictionary (PlayerRef → GameObject)
     private Dictionary<PlayerRef, GameObject> lobbyPlayerUIs = new  Dictionary<PlayerRef, GameObject>();
 
+    public LobbySlotManager SlotManager;
+    private Dictionary<PlayerRef, int> playerSlotIndexes = new Dictionary<PlayerRef, int>();
+    
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -123,13 +126,47 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
 
     public void SpawnLobbyPlayerUI(PlayerRef player, NetworkRunner runner)
     {
+        // // 이미 생성된 경우 중복 생성 방지
+        // if (lobbyPlayerUIs.ContainsKey(player))
+        //     return;
+        //
+        // //빈 슬롯 인덱스 찾기(가장 작은 인덱스부터)
+        // int slotIndex = 0;
+        // while(playerSlotIndexes.ContainsValue(slotIndex) && slotIndex
+        //       < SlotManager.slots.Count)
+        //     slotIndex++;
+        //
+        // if (slotIndex >= SlotManager.slots.Count)
+        // {
+        //     Debug.LogWarning("8명의 플레이어가 모두 접속하여 슬롯이 모두 찼습니다.");
+        //     return;
+        // }
+        //
+        // //지정해놓은 슬롯의 위치에 프리팹 생성
+        // Transform slotTransform = SlotManager.GetSlot(slotIndex);
+        // var uiGo = Instantiate(lobbyPlayerUIPrefab, slotTransform);
+        // //슬롯 중앙에 오도록
+        // uiGo.transform.localPosition = Vector3.zero;
+        //
+        // lobbyPlayerUIs[player] = uiGo;
+        // playerSlotIndexes[player] = slotIndex;
+        //
+        // var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
+        // if (lobbyPlayer != null)
+        // {
+        //     string nickname = (runner.LocalPlayer == player) ?
+        //         StaticData.LocalNickname : $"Player_{player.PlayerId}";
+        //         lobbyPlayer.SetNickname(nickname);
+        // }
+
         var uiGo = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
+        
         var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
         if (lobbyPlayer != null)
         {
             //닉네임은 StaticData 또는 네트워크에서 받아온 값 사용
             string nickname = (runner.LocalPlayer == player) ? 
-                StaticData.LocalNickname : "다른 플레이어";
+                StaticData.LocalNickname : $"Player_{player.PlayerId}";
             lobbyPlayer.SetNickname(nickname);
         }
     }
@@ -140,6 +177,8 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
         {
             Destroy(ui);
             lobbyPlayerUIs.Remove(player);
+            //플레이어 퇴장 시 슬롯 비우기
+            //playerSlotIndexes.Remove(player);
         }
     }
     

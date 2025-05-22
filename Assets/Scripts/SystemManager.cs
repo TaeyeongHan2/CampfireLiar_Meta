@@ -16,16 +16,16 @@ public class SystemManager : MonoBehaviour
     {
         Instance = this;
 
-        NetworkSceneManagerDefault.sceneLoaded += OnSceneLoded;
+        //NetworkSceneManagerDefault.sceneLoaded += OnSceneLoded;
     }
 
-    private void OnSceneLoded(Scene scene)
-    {
-        if (scene.name.Contains("Room"))
-        {
-            
-        }
-    }
+    // private void OnSceneLoded(Scene scene)
+    // {
+    //     if (scene.name.Contains("Room"))
+    //     {
+    //         
+    //     }
+    // }
 
     public void ToggleInteraction(bool isOn)
     {
