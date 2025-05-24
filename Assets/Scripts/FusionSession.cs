@@ -116,21 +116,12 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        SpawnLobbyPlayerUI(player,  runner);
+        if(!lobbyPlayerUIs.ContainsKey(player))
+            SpawnLobbyPlayerUI(player,  runner);
     }
 
     public void SpawnLobbyPlayerUI(PlayerRef player, NetworkRunner runner)
     {
-        if (SlotManager == null)
-        {
-            Debug.LogError("SlotManager가 null입니다! 씬에 SlotManager 오브젝트가 있는지 확인하세요.");
-            return;
-        }
-        if (lobbyPlayerUIPrefab == null)
-        {
-            Debug.LogError("lobbyPlayerUIPrefab이 null입니다! Inspector에 프리팹이 할당되어 있는지 확인하세요.");
-            return;
-        }
         // 슬롯 인덱스 할당 (예: 순차적으로 할당)
         int slotIndex = 0;
         while (playerSlotIndexes.ContainsValue(slotIndex) && slotIndex < SlotManager.slots.Count)
@@ -142,11 +133,6 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         Transform slotTransform = SlotManager.GetSlot(slotIndex);
-        if (slotTransform == null)
-        {
-            Debug.LogError("slotTransform이 null입니다! SlotManager의 slots 리스트를 확인하세요.");
-            return;
-        }
 
         // runner.Spawn 사용!
         NetworkObject networkObj = runner.Spawn(
@@ -155,13 +141,7 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
             slotTransform.rotation,
             inputAuthority: player
         );
-
-        if (networkObj == null)
-        {
-            Debug.Log("runner.Spawn()이 null을 반환했습니다. Prefab Table, NetworkObject, Prefab 할당을 모두 확인하세요.");
-            return;
-        }
-
+        
         networkObj.transform.SetParent(slotTransform, worldPositionStays: false);
         networkObj.transform.localPosition = Vector3.zero;
 

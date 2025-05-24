@@ -622,7 +622,7 @@ namespace Fusion {
       
       Log.TraceSceneManager(Runner, $"Finished loading & processing {scene.Dump()} for {sceneRef}");
       Runner.InvokeSceneLoadDone(new SceneLoadDoneArgs(sceneRef, sceneObjects, scene, rootObjects));
-      sceneLoaded.Invoke(scene);
+      sceneLoaded?.Invoke(scene);
       yield break;
     }
 
