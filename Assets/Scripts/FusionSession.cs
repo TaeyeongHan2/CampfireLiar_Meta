@@ -117,58 +117,56 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         SpawnLobbyPlayerUI(player,  runner);
-        if (SceneManager.GetActiveScene().name == lobbyScene)
-        {
-            GameObject ui = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
-            lobbyPlayerUIs[player] = ui;
-        }
     }
 
     public void SpawnLobbyPlayerUI(PlayerRef player, NetworkRunner runner)
     {
-        // // 이미 생성된 경우 중복 생성 방지
-        // if (lobbyPlayerUIs.ContainsKey(player))
-        //     return;
-        //
-        // //빈 슬롯 인덱스 찾기(가장 작은 인덱스부터)
-        // int slotIndex = 0;
-        // while(playerSlotIndexes.ContainsValue(slotIndex) && slotIndex
-        //       < SlotManager.slots.Count)
-        //     slotIndex++;
-        //
-        // if (slotIndex >= SlotManager.slots.Count)
-        // {
-        //     Debug.LogWarning("8명의 플레이어가 모두 접속하여 슬롯이 모두 찼습니다.");
-        //     return;
-        // }
-        //
-        // //지정해놓은 슬롯의 위치에 프리팹 생성
-        // Transform slotTransform = SlotManager.GetSlot(slotIndex);
-        // var uiGo = Instantiate(lobbyPlayerUIPrefab, slotTransform);
-        // //슬롯 중앙에 오도록
-        // uiGo.transform.localPosition = Vector3.zero;
-        //
-        // lobbyPlayerUIs[player] = uiGo;
-        // playerSlotIndexes[player] = slotIndex;
-        //
-        // var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
-        // if (lobbyPlayer != null)
-        // {
-        //     string nickname = (runner.LocalPlayer == player) ?
-        //         StaticData.LocalNickname : $"Player_{player.PlayerId}";
-        //         lobbyPlayer.SetNickname(nickname);
-        // }
-
-        var uiGo = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
-        
-        var lobbyPlayer = uiGo.GetComponent<LobbyPlayer>();
-        if (lobbyPlayer != null)
+        if (SlotManager == null)
         {
-            //닉네임은 StaticData 또는 네트워크에서 받아온 값 사용
-            string nickname = (runner.LocalPlayer == player) ? 
-                StaticData.LocalNickname : $"Player_{player.PlayerId}";
-            lobbyPlayer.SetNickname(nickname);
+            Debug.LogError("SlotManager가 null입니다! 씬에 SlotManager 오브젝트가 있는지 확인하세요.");
+            return;
         }
+        if (lobbyPlayerUIPrefab == null)
+        {
+            Debug.LogError("lobbyPlayerUIPrefab이 null입니다! Inspector에 프리팹이 할당되어 있는지 확인하세요.");
+            return;
+        }
+        // 슬롯 인덱스 할당 (예: 순차적으로 할당)
+        int slotIndex = 0;
+        while (playerSlotIndexes.ContainsValue(slotIndex) && slotIndex < SlotManager.slots.Count)
+            slotIndex++;
+        if (slotIndex >= SlotManager.slots.Count)
+        {
+            Debug.LogWarning("모든 슬롯이 찼습니다.");
+            return;
+        }
+
+        Transform slotTransform = SlotManager.GetSlot(slotIndex);
+        if (slotTransform == null)
+        {
+            Debug.LogError("slotTransform이 null입니다! SlotManager의 slots 리스트를 확인하세요.");
+            return;
+        }
+
+        // runner.Spawn 사용!
+        NetworkObject networkObj = runner.Spawn(
+            lobbyPlayerUIPrefab,
+            slotTransform.position,
+            slotTransform.rotation,
+            inputAuthority: player
+        );
+
+        if (networkObj == null)
+        {
+            Debug.Log("runner.Spawn()이 null을 반환했습니다. Prefab Table, NetworkObject, Prefab 할당을 모두 확인하세요.");
+            return;
+        }
+
+        networkObj.transform.SetParent(slotTransform, worldPositionStays: false);
+        networkObj.transform.localPosition = Vector3.zero;
+
+        lobbyPlayerUIs[player] = networkObj.gameObject;
+        playerSlotIndexes[player] = slotIndex;
     }
     
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -177,8 +175,6 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
         {
             Destroy(ui);
             lobbyPlayerUIs.Remove(player);
-            //플레이어 퇴장 시 슬롯 비우기
-            //playerSlotIndexes.Remove(player);
         }
     }
     
@@ -190,8 +186,7 @@ public class FusionSession : MonoBehaviour, INetworkRunnerCallbacks
             {
                 if (!lobbyPlayerUIs.ContainsKey(player))
                 {
-                    GameObject ui = Instantiate(lobbyPlayerUIPrefab, lobbyUIParent);
-                    lobbyPlayerUIs[player] = ui;
+                    SpawnLobbyPlayerUI(player, runner);
                 }
             }
         }

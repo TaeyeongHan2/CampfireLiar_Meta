@@ -119,6 +119,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &380705745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 380705746}
+  - component: {fileID: 380705747}
+  m_Layer: 5
+  m_Name: SlotManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &380705746
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380705745}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1133577425072964698}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 960, y: 540}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &380705747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380705745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8139c67399279d24f89cbbe339af1b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots:
+  - {fileID: 2363503398811866593}
+  - {fileID: 8816966013896961898}
+  - {fileID: 9070897658691477868}
+  - {fileID: 1816753831022482108}
+  - {fileID: 3948056190172250665}
+  - {fileID: 863321826968588540}
+  - {fileID: 5498671956152439126}
+  - {fileID: 4516523457612397481}
 --- !u!1 &768819938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1312,7 @@ Transform:
   m_Children:
   - {fileID: 8594813504407086406}
   - {fileID: 8505853130296560364}
+  - {fileID: 380705746}
   - {fileID: 894375706}
   m_Father: {fileID: 7829546075576249089}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4363,6 +4421,7 @@ MonoBehaviour:
   lobbyUIParent: {fileID: 6058291579165382169, guid: 447ba8242a7cf0141813bf43d0a53210, type: 3}
   nicknameInputField: {fileID: 6310458358157512769}
   roomNameInputField: {fileID: 1139677241000130409}
+  SlotManager: {fileID: 380705747}
 --- !u!114 &4315113710332746521
 MonoBehaviour:
   m_ObjectHideFlags: 0
